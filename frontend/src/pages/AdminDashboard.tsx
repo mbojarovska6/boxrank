@@ -16,7 +16,8 @@ export default function AdminDashboard() {
       await fights.confirm(id);
       setMsg('Dvoboj potrjen!');
       load();
-    } catch (err: any) {
+    } catch (e) {
+      const err = e as { response?: { data?: { message?: string } } };
       setMsg(err.response?.data?.message ?? 'Napaka.');
     }
   };
@@ -29,7 +30,8 @@ export default function AdminDashboard() {
       setRejectId(null);
       setRejectReason('');
       load();
-    } catch (err: any) {
+    } catch (e) {
+      const err = e as { response?: { data?: { message?: string } } };
       setMsg(err.response?.data?.message ?? 'Napaka.');
     }
   };

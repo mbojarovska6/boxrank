@@ -19,7 +19,8 @@ export default function Login() {
       if (data.user.role === 'admin') navigate('/admin');
       else if (data.user.role === 'promoter') navigate('/dashboard');
       else navigate('/');
-    } catch (err: any) {
+    } catch (e) {
+      const err = e as { response?: { data?: { message?: string } } };
       setError(err.response?.data?.message ?? 'Napaka pri prijavi.');
     }
   };

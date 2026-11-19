@@ -16,7 +16,8 @@ const createSchema = z.object({
 router.get('/', async (_req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getAll());
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(500).json({ message: err.message });
   }
 });
@@ -25,7 +26,8 @@ router.get('/', async (_req: Request, res: Response): Promise<void> => {
 router.get('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getById(parseInt(req.params.id)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -40,7 +42,8 @@ router.post('/', authenticate, requireRole(Role.admin, Role.promoter), async (re
   try {
     const event = await svc.create(parsed.data.name, new Date(parsed.data.date), parsed.data.location);
     res.status(201).json(event);
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });

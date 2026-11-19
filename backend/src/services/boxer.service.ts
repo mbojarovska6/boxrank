@@ -1,5 +1,5 @@
 import prisma from '../prisma';
-import { BoxerStatus } from '@prisma/client';
+import { BoxerStatus, Prisma } from '@prisma/client';
 
 const publicSelect = {
   id: true, firstName: true, lastName: true, dateOfBirth: true,
@@ -79,7 +79,7 @@ export async function activate(id: number) {
 export async function search(params: {
   search?: string; weightClassId?: number; clubId?: number; page: number; limit: number;
 }) {
-  const where: any = {};
+  const where: Prisma.BoxerWhereInput = {};
   if (params.search) {
     where.OR = [
       { firstName: { contains: params.search, mode: 'insensitive' } },

@@ -1,4 +1,4 @@
-import { PrismaClient, Role, BoxerStatus } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -7,7 +7,7 @@ async function main() {
   const hash = (pw: string) => bcrypt.hash(pw, 10);
 
   // Admin
-  const admin = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'admin@boxrank.si' },
     update: {},
     create: {

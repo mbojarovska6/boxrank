@@ -30,7 +30,8 @@ router.post('/', authenticate, requireRole(Role.promoter), async (req: Request, 
       promoterId: req.user!.id,
     });
     res.status(201).json(fight);
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -39,7 +40,8 @@ router.post('/', authenticate, requireRole(Role.promoter), async (req: Request, 
 router.get('/pending', authenticate, requireRole(Role.admin), async (_req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getPending());
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(500).json({ message: err.message });
   }
 });
@@ -48,7 +50,8 @@ router.get('/pending', authenticate, requireRole(Role.admin), async (_req: Reque
 router.put('/:id/confirm', authenticate, requireRole(Role.admin), async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.confirm(parseInt(req.params.id)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -62,7 +65,8 @@ router.put('/:id/reject', authenticate, requireRole(Role.admin), async (req: Req
   }
   try {
     res.json(await svc.reject(parseInt(req.params.id), reason));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -71,7 +75,8 @@ router.put('/:id/reject', authenticate, requireRole(Role.admin), async (req: Req
 router.get('/boxer/:boxerId', async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getByBoxer(parseInt(req.params.boxerId)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });

@@ -17,7 +17,8 @@ export default function Register() {
       await auth.register(email, password, role);
       setSuccess(true);
       setTimeout(() => navigate('/login'), 1500);
-    } catch (err: any) {
+    } catch (e) {
+      const err = e as { response?: { data?: { message?: string } } };
       setError(err.response?.data?.message ?? 'Napaka pri registraciji.');
     }
   };

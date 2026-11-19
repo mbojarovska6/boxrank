@@ -33,7 +33,8 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 
   try {
     res.json(await svc.search({ search, weightClassId, clubId, page, limit }));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -52,7 +53,8 @@ router.post('/', authenticate, requireRole(Role.promoter), async (req: Request, 
       promoterId: req.user!.id,
     });
     res.status(201).json(boxer);
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -61,7 +63,8 @@ router.post('/', authenticate, requireRole(Role.promoter), async (req: Request, 
 router.get('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getById(parseInt(req.params.id)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -79,7 +82,8 @@ router.put('/:id', authenticate, requireRole(Role.promoter), async (req: Request
       dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : undefined,
     };
     res.json(await svc.update(parseInt(req.params.id), req.user!.id, data));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -93,7 +97,8 @@ router.put('/:id/suspend', authenticate, requireRole(Role.admin), async (req: Re
   }
   try {
     res.json(await svc.suspend(parseInt(req.params.id), reason));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -102,7 +107,8 @@ router.put('/:id/suspend', authenticate, requireRole(Role.admin), async (req: Re
 router.put('/:id/activate', authenticate, requireRole(Role.admin), async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.activate(parseInt(req.params.id)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
