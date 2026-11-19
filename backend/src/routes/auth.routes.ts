@@ -31,7 +31,8 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       parsed.data.role,
     );
     res.status(201).json(user);
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -47,7 +48,8 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
   try {
     const result = await authService.login(parsed.data.email, parsed.data.password);
     res.json(result);
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });

@@ -15,7 +15,8 @@ const updateSchema = z.object({
 router.get('/my', authenticate, requireRole(Role.promoter), async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getMyClub(req.user!.id));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -24,7 +25,8 @@ router.get('/my', authenticate, requireRole(Role.promoter), async (req: Request,
 router.get('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getById(parseInt(req.params.id)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -38,7 +40,8 @@ router.put('/:id', authenticate, requireRole(Role.promoter), async (req: Request
   }
   try {
     res.json(await svc.update(parseInt(req.params.id), req.user!.id, parsed.data.name, parsed.data.location));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -48,7 +51,8 @@ router.get('/:id/boxers', authenticate, requireRole(Role.promoter, Role.admin), 
   const promoterId = req.user!.role === Role.promoter ? req.user!.id : undefined;
   try {
     res.json(await svc.getBoxers(parseInt(req.params.id), promoterId));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });

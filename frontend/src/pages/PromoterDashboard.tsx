@@ -1,10 +1,8 @@
 import { useEffect, useState, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { clubs, boxers, fights, events, weightClasses, rankings, Boxer, WeightClass, Event, Suggestion } from '../api';
-import { useAuth } from '../context/AuthContext';
 
 export default function PromoterDashboard() {
-  const { user } = useAuth();
   const [myBoxers, setMyBoxers] = useState<Boxer[]>([]);
   const [myClubId, setMyClubId] = useState<number | null>(null);
   const [classes, setClasses] = useState<WeightClass[]>([]);
@@ -47,7 +45,8 @@ export default function PromoterDashboard() {
       setMsg('Boksar dodan!');
       setNewBoxer({ firstName: '', lastName: '', dateOfBirth: '', weightClassId: '' });
       clubs.getBoxers(myClubId).then(r => setMyBoxers(r.data));
-    } catch (err: any) {
+    } catch (e) {
+      const err = e as { response?: { data?: { message?: string } } };
       setMsg(err.response?.data?.message ?? 'Napaka.');
     }
   };
@@ -76,7 +75,8 @@ export default function PromoterDashboard() {
       await fights.create(payload);
       setMsg('Predlog dvoboja oddan! Admin bo potrdil.');
       setFightForm({ boxer1Id: '', boxer2Id: '', eventId: '', date: '', result: 'KO', winnerId: '' });
-    } catch (err: any) {
+    } catch (e) {
+      const err = e as { response?: { data?: { message?: string } } };
       setMsg(err.response?.data?.message ?? 'Napaka.');
     }
   };
@@ -88,7 +88,8 @@ export default function PromoterDashboard() {
       setMsg('Dogodek ustvarjen!');
       setEventForm({ name: '', date: '', location: '' });
       events.getAll().then(r => setEventList(r.data));
-    } catch (err: any) {
+    } catch (e) {
+      const err = e as { response?: { data?: { message?: string } } };
       setMsg(err.response?.data?.message ?? 'Napaka.');
     }
   };

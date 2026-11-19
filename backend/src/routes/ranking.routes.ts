@@ -17,7 +17,8 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 
   try {
     res.json(await svc.getRankings(weightClassId, page, limit));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -26,7 +27,8 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 router.get('/suggestions/:boxerId', authenticate, requireRole(Role.promoter, Role.boxer), async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getSuggestedOpponents(parseInt(req.params.boxerId)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -35,7 +37,8 @@ router.get('/suggestions/:boxerId', authenticate, requireRole(Role.promoter, Rol
 router.get('/history/:boxerId', async (req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getRatingHistory(parseInt(req.params.boxerId)));
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });

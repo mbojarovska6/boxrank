@@ -18,7 +18,8 @@ const bodySchema = z.object({
 router.get('/', async (_req: Request, res: Response): Promise<void> => {
   try {
     res.json(await svc.getAll());
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(500).json({ message: err.message });
   }
 });
@@ -33,7 +34,8 @@ router.post('/', authenticate, requireRole(Role.admin), async (req: Request, res
   try {
     const wc = await svc.create(parsed.data.name, parsed.data.minWeight, parsed.data.maxWeight);
     res.status(201).json(wc);
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -49,7 +51,8 @@ router.put('/:id', authenticate, requireRole(Role.admin), async (req: Request, r
   try {
     const wc = await svc.update(id, parsed.data.name, parsed.data.minWeight, parsed.data.maxWeight);
     res.json(wc);
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
@@ -60,7 +63,8 @@ router.delete('/:id', authenticate, requireRole(Role.admin), async (req: Request
   try {
     await svc.remove(id);
     res.status(204).send();
-  } catch (err: any) {
+  } catch (e) {
+    const err = e as { status?: number; message?: string };
     res.status(err.status ?? 500).json({ message: err.message });
   }
 });
