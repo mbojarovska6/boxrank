@@ -1,0 +1,21 @@
+# Production image for the backend.
+# It uses the already built code (dist) from the CI build artifact - no TypeScript build here.
+FROM node:22-slim
+LABEL org.opencontainers.image.source=https://github.com/mbojarovska6/boxrank
+
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY package.json package-lock.json tsconfig.json ./
+RUN npm ci
+
+COPY prisma ./prisma
+RUN npx prisma generate
+
+COPY dist ./dist
+
+ENV NODE_ENV=production
+EXPOSE 3000
+
+# Apply migrations, add test data (only once), then start the server
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node dist/index.js"]
