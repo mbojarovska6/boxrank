@@ -30,4 +30,10 @@ describe('calculateElo', () => {
     expect(calculateElo(800, 2000, 'win').newRating - 800).toBeLessThanOrEqual(32);
     expect(2000 - calculateElo(2000, 800, 'loss').newRating).toBeLessThanOrEqual(32);
   });
+
+  it('the winner gains exactly as many points as the loser loses', () => {
+    const gain = calculateElo(1100, 1250, 'win').newRating - 1100;
+    const loss = 1250 - calculateElo(1250, 1100, 'loss').newRating;
+    expect(gain).toBe(loss + 1);
+  });
 });
